@@ -1,11 +1,324 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBM Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f4f4f4;
+      --bg-tertiary: #e8e8e8;
+      --text: #161616;
+      --text-secondary: #525252;
+      --text-tertiary: #8d8d8d;
+      --border: #e0e0e0;
+      --border-hover: #c6c6c6;
+      --accent: #0f62fe;
+      --accent-hover: #0043ce;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: #161616;
+      color: #ffffff;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+    .topbar-logo {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+    .topbar-sep {
+      width: 1px;
+      height: 16px;
+      background: #393939;
+    }
+    .topbar-nav a {
+      font-size: 13px;
+      color: #c6c6c6;
+      text-decoration: none;
+      margin-right: 1.25rem;
+    }
+    .topbar-nav a:hover { color: #ffffff; }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 2rem 2rem;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+    .hero-meta {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 2rem;
+    }
+    .meta-item {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 120px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 0 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+    .sidebar-item {
+      display: block;
+      padding: 0.55rem 1.25rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background 0.1s, color 0.1s;
+    }
+    .sidebar-item:hover {
+      background: var(--bg-secondary);
+      color: var(--text);
+    }
+    .sidebar-item.active {
+      border-left-color: var(--accent);
+      color: var(--accent);
+      background: #edf4ff;
+      font-weight: 500;
+    }
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1rem 0;
+    }
+
+    /* ── Main content ── */
+    .main {
+      padding: 2rem 2.5rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .section-count {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* ── Game table ── */
+    .game-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 3rem;
+    }
+    .game-table tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .game-table tr:hover td {
+      background: var(--bg-secondary);
+    }
+    .game-table td {
+      padding: 0.8rem 0.75rem;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    .game-table td:first-child { padding-left: 0; }
+    .game-table td:last-child  { padding-right: 0; }
+
+    .game-name {
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .game-name:hover { text-decoration: underline; color: var(--accent-hover); }
+
+    .game-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .game-players {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-family: 'IBM Plex Mono', monospace;
+      white-space: nowrap;
+    }
+    .col-arrow {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      text-align: right;
+      width: 20px;
+    }
+
+    /* ── Add game notice ── */
+    .add-notice {
+      border: 1px dashed var(--border-hover);
+      padding: 1rem 1.25rem;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-top: -2rem;
+      margin-bottom: 3rem;
+      background: var(--bg);
+    }
+    .add-notice code {
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg-secondary);
+      padding: 1px 5px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello 👋</h1>
-  <p>This is my GitHub Pages site.</p>
-  <a href="games">gam</a>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <span class="topbar-logo">IBM Games</span>
+    <div class="topbar-sep"></div>
+    <nav class="topbar-nav">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>IBM Games</h1>
+    <p>A curated collection of browser games we play together. Click any title to open it in a new tab.</p>
+    <div class="hero-meta">
+      <!-- Update this number when you add games -->
+      <span class="meta-item">0 games listed</span>
+      <span class="meta-item">Last updated 2026</span>
+    </div>
+  </div>
+
+  <!-- Two-column layout -->
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-label">Navigation</div>
+      <a href="#" class="sidebar-item active">All games</a>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Info</div>
+      <a href="#" class="sidebar-item">About</a>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <div class="section-header">
+        <span class="section-title">All games</span>
+        <!-- Update count here too -->
+        <span class="section-count">0 games</span>
+      </div>
+
+      <table class="game-table">
+        <tbody>
+
+          <!--
+            HOW TO ADD A GAME
+            Copy one <tr> block below and fill in:
+              1. href="..."       → the URL of the game
+              2. Game Name        → what appears as the link
+              3. Description      → short one-line description
+              4. X player(s)      → e.g. "1 player" or "multiplayer"
+
+            Example:
+            <tr>
+              <td><a class="game-name" href="https://www.nytimes.com/games/wordle" target="_blank" rel="noopener">Wordle</a></td>
+              <td class="game-desc">Guess the 5-letter word in 6 tries</td>
+              <td class="game-players">1 player</td>
+              <td class="col-arrow">→</td>
+            </tr>
+
+            Add as many <tr> blocks as you like.
+          -->
+
+          <!-- PASTE YOUR GAMES BELOW THIS LINE -->
+
+
+          <!-- PASTE YOUR GAMES ABOVE THIS LINE -->
+
+        </tbody>
+      </table>
+
+      <div class="add-notice">
+        No games added yet. Open <code>index.html</code> and follow the comment instructions inside the <code>&lt;tbody&gt;</code> to add your games.
+      </div>
+
+    </main>
+  </div>
+
+  <footer>
+    IBM Games &mdash; private collection
+  </footer>
+
 </body>
 </html>
